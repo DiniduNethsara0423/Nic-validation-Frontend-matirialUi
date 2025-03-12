@@ -1,7 +1,26 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Grid, Typography, Card, CardContent, CircularProgress } from "@mui/material";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import {
+  Container,
+  Grid,
+  Typography,
+  Card,
+  CardContent,
+  CircularProgress,
+} from "@mui/material";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+} from "recharts";
 
 function DashboardPage() {
   const [stats, setStats] = useState({
@@ -31,16 +50,13 @@ function DashboardPage() {
           axios.get(API_URLS.csvFilesUploaded),
         ]);
 
-        const newStats = {
+        setStats({
           nicCount: responses[0].data,
           maleCount: responses[1].data,
           femaleCount: responses[2].data,
           csvFilesUploaded: responses[3].data,
-        };
+        });
 
-        console.log("Updated Stats:", newStats);
-
-        setStats(newStats);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -52,11 +68,14 @@ function DashboardPage() {
     fetchStats();
   }, []);
 
-
-
   const pieData = [
     { name: "Male", value: stats.maleCount },
     { name: "Female", value: stats.femaleCount },
+  ];
+
+  const barData = [
+    { category: "Male", count: stats.maleCount },
+    { category: "Female", count: stats.femaleCount },
   ];
 
   const COLORS = ["#42A5F5", "#F48FB1"];
@@ -72,7 +91,9 @@ function DashboardPage() {
           <CircularProgress />
         </Grid>
       ) : error ? (
-        <Typography color="error" textAlign="center">{error}</Typography>
+        <Typography color="error" textAlign="center">
+          {error}
+        </Typography>
       ) : (
         <Grid container spacing={3}>
           {[
@@ -84,7 +105,9 @@ function DashboardPage() {
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Card sx={{ textAlign: "center", p: 2, boxShadow: 5, borderRadius: 2 }}>
                 <CardContent>
-                  <Typography variant="h6" fontWeight={500}>{stat.label}</Typography>
+                  <Typography variant="h6" fontWeight={500}>
+                    {stat.label}
+                  </Typography>
                   <Typography variant="h3" color="primary" fontWeight={700}>
                     {stat.value}
                   </Typography>
@@ -93,11 +116,12 @@ function DashboardPage() {
             </Grid>
           ))}
 
+          {/* Pie Chart */}
           <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "center" }}>
             <Card sx={{ p: 3, boxShadow: 5, borderRadius: 2, width: "100%" }}>
               <CardContent>
                 <Typography variant="h6" textAlign="center" fontWeight={500}>
-                  Gender Distribution
+                  Gender Distribution (Pie Chart)
                 </Typography>
                 <ResponsiveContainer width="100%" height={350}>
                   <PieChart>
@@ -117,6 +141,27 @@ function DashboardPage() {
                     <Tooltip />
                     <Legend verticalAlign="bottom" height={36} />
                   </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* Bar Chart */}
+          <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "center" }}>
+            <Card sx={{ p: 3, boxShadow: 5, borderRadius: 2, width: "100%" }}>
+              <CardContent>
+                <Typography variant="h6" textAlign="center" fontWeight={500}>
+                  Gender Distribution (Bar Chart)
+                </Typography>
+                <ResponsiveContainer width="100%" height={350}>
+                  <BarChart data={barData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="category" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="count" fill="#42A5F5" name="Count" />
+                  </BarChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>
