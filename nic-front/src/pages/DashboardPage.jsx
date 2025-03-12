@@ -4,7 +4,6 @@ import { Container, Grid, Typography, Card, CardContent, CircularProgress } from
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 function DashboardPage() {
-  // State variables for storing API data
   const [stats, setStats] = useState({
     nicCount: 0,
     maleCount: 0,
@@ -15,7 +14,6 @@ function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // API URLs (Replace with actual API endpoints)
   const API_URLS = {
     nicCount: "http://localhost:8080/nic/nicCount",
     maleCount: "http://localhost:8080/nic/getMaleCount",
@@ -32,16 +30,16 @@ function DashboardPage() {
           axios.get(API_URLS.femaleCount),
           axios.get(API_URLS.csvFilesUploaded),
         ]);
-  
+
         const newStats = {
-          nicCount: responses[0].data,  // Directly store the number
+          nicCount: responses[0].data,
           maleCount: responses[1].data,
           femaleCount: responses[2].data,
           csvFilesUploaded: responses[3].data,
         };
-  
-        console.log("Updated Stats:", newStats); // Check the data again
-  
+
+        console.log("Updated Stats:", newStats);
+
         setStats(newStats);
         setLoading(false);
       } catch (err) {
@@ -50,12 +48,12 @@ function DashboardPage() {
         setLoading(false);
       }
     };
-  
+
     fetchStats();
   }, []);
-  
-  
-  
+
+
+
   const pieData = [
     { name: "Male", value: stats.maleCount },
     { name: "Female", value: stats.femaleCount },
@@ -78,22 +76,22 @@ function DashboardPage() {
       ) : (
         <Grid container spacing={3}>
           {[
-  { label: "Total NIC Count", value: stats.nicCount },
-  { label: "Male Count", value: stats.maleCount },
-  { label: "Female Count", value: stats.femaleCount },
-  { label: "Uploaded Files", value: stats.csvFilesUploaded },
-].map((stat, index) => (
-  <Grid item xs={12} sm={6} md={3} key={index}>
-    <Card sx={{ textAlign: "center", p: 2, boxShadow: 5, borderRadius: 2 }}>
-      <CardContent>
-        <Typography variant="h6" fontWeight={500}>{stat.label}</Typography>
-        <Typography variant="h3" color="primary" fontWeight={700}>
-          {stat.value}
-        </Typography>
-      </CardContent>
-    </Card>
-  </Grid>
-))}
+            { label: "Total NIC Count", value: stats.nicCount },
+            { label: "Male Count", value: stats.maleCount },
+            { label: "Female Count", value: stats.femaleCount },
+            { label: "Uploaded Files", value: stats.csvFilesUploaded },
+          ].map((stat, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <Card sx={{ textAlign: "center", p: 2, boxShadow: 5, borderRadius: 2 }}>
+                <CardContent>
+                  <Typography variant="h6" fontWeight={500}>{stat.label}</Typography>
+                  <Typography variant="h3" color="primary" fontWeight={700}>
+                    {stat.value}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
 
           <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "center" }}>
             <Card sx={{ p: 3, boxShadow: 5, borderRadius: 2, width: "100%" }}>

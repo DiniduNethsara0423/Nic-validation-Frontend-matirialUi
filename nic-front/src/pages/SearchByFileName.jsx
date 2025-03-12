@@ -18,16 +18,15 @@ import {
 
 const SearchByFileName = () => {
   const [fileName, setFileName] = useState('');
-  const [uploadedFiles, setUploadedFiles] = useState([]); // To store the file names from API
-  const [nicData, setNicData] = useState([]); // To store the data based on selected file
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [nicData, setNicData] = useState([]);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    // Fetch file names from API when the component mounts
     axios.get('http://localhost:8080/file/names')
       .then((response) => {
-        setUploadedFiles(response.data); // Set the file names
+        setUploadedFiles(response.data);
       })
       .catch((error) => {
         console.error('Error fetching file names:', error);
@@ -36,13 +35,12 @@ const SearchByFileName = () => {
 
   useEffect(() => {
     if (fileName) {
-      // Fetch data when fileName is selected
       axios.get(`http://localhost:8080/nic/getByFileName/${fileName}`)
         .then((response) => {
-          setNicData(response.data || []); 
+          setNicData(response.data || []);
           console.log(response.data);
         })
-       
+
         .catch((error) => {
           console.error('Error fetching NIC data:', error);
         });

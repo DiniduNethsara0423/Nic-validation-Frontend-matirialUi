@@ -50,8 +50,8 @@ function GenerateReportsPage() {
           reportType === "pdf"
             ? "application/pdf"
             : reportType === "csv"
-            ? "text/csv"
-            : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+              ? "text/csv"
+              : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
 
       // Download file
