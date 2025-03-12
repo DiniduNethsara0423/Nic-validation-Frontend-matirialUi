@@ -5,7 +5,7 @@ import {
   Button,
   Card,
   CardContent,
-  Grid,
+  Grid2,
   List,
   ListItem,
   ListItemIcon,
@@ -78,11 +78,11 @@ function UploadCsvPage() {
 
       {/* Upload Button */}
       {files.length > 0 && (
-        <Grid container justifyContent="center" sx={{ mt: 3 }}>
+        <Grid2 container justifyContent="center" sx={{ mt: 3 }}>
           <Button variant="contained" color="success">
             Upload Files
           </Button>
-        </Grid>
+        </Grid2>
       )}
     </Container>
   );

@@ -28,7 +28,7 @@ const Navbar = () => {
     { label: "Upload CSV", path: "/upload" },
     { label: "Generate Reports", path: "/reports" },
     { label: "Show All NICs", path: "/nics" },
-    { label: "Search by File Name", path: "/search" },
+    { label: "Sea   rch by File Name", path: "/search" },
   ];
 
   const currentTab = navItems.findIndex((item) => item.path === location.pathname);
@@ -49,7 +49,7 @@ const Navbar = () => {
 
         {/* App Name / Logo */}
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          My App
+          NIC Validator
         </Typography>
 
         {/* Desktop Navigation Tabs */}
