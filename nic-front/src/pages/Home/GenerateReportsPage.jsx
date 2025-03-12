@@ -12,6 +12,8 @@ import {
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import axios from "axios";
 import { saveAs } from "file-saver";
+import Layout from "./layout";
+
 
 function GenerateReportsPage() {
   const [fileName, setFileName] = useState("");
@@ -63,6 +65,7 @@ function GenerateReportsPage() {
   };
 
   return (
+    <Layout>
     <Container>
       <Typography variant="h4" gutterBottom>
         Generate Reports
@@ -115,6 +118,7 @@ function GenerateReportsPage() {
         </CardContent>
       </Card>
     </Container>
+    </Layout>
   );
 }
 

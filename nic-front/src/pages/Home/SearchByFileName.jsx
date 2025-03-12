@@ -15,6 +15,8 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
+import Layout from "./layout";
+
 
 const SearchByFileName = () => {
   const [fileName, setFileName] = useState('');
@@ -48,6 +50,7 @@ const SearchByFileName = () => {
   }, [fileName]);
 
   return (
+    <Layout>
     <div style={{ padding: '20px' }}>
       <Typography variant="h5" gutterBottom>
         NIC Details
@@ -94,6 +97,7 @@ const SearchByFileName = () => {
         </Table>
       </TableContainer>
     </div>
+    </Layout>
   );
 };
 

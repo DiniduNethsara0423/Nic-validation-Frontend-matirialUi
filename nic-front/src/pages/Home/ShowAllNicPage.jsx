@@ -13,6 +13,8 @@ import {
     useTheme,
     Container,
 } from '@mui/material';
+import Layout from "./layout";
+
 
 const ShowAllNicPage = () => {
     const theme = useTheme();
@@ -34,6 +36,7 @@ const ShowAllNicPage = () => {
     }, []);
 
     return (
+        <Layout>
         <Container maxWidth={isLaptopScreen ? false : "md"} style={{ padding: '20px' }}>
             <Typography variant={isSmallScreen ? 'h6' : 'h5'} gutterBottom>
                 NIC Details
@@ -61,6 +64,7 @@ const ShowAllNicPage = () => {
                 </Table>
             </TableContainer>
         </Container>
+        </Layout>
     );
 };
 

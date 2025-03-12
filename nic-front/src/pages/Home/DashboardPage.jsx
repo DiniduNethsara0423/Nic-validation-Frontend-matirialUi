@@ -21,6 +21,7 @@ import {
   YAxis,
   CartesianGrid,
 } from "recharts";
+import Layout from "./layout";
 
 function DashboardPage() {
   const [stats, setStats] = useState({
@@ -81,6 +82,7 @@ function DashboardPage() {
   const COLORS = ["#42A5F5", "#F48FB1"];
 
   return (
+    <Layout>
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" gutterBottom fontWeight={600} textAlign="center">
         Dashboard
@@ -169,6 +171,7 @@ function DashboardPage() {
         </Grid>
       )}
     </Container>
+    </Layout>
   );
 }
 

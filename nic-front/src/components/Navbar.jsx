@@ -24,7 +24,7 @@ const Navbar = () => {
 
   // Navigation items
   const navItems = [
-    { label: "Dashboard", path: "/" },
+    { label: "Dashboard", path: "/dashboard" },
     { label: "Upload CSV", path: "/upload" },
     { label: "Generate Reports", path: "/reports" },
     { label: "Show All NICs", path: "/nics" },

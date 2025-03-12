@@ -16,6 +16,8 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import Layout from "./layout";
+
 
 function UploadCsvPage() {
     const [files, setFiles] = useState([]);
@@ -52,6 +54,7 @@ function UploadCsvPage() {
     };
 
     return (
+        <Layout>
         <Container>
             <Typography variant="h4" gutterBottom>
                 Upload CSV Files
@@ -117,6 +120,7 @@ function UploadCsvPage() {
                 <Alert severity={uploadStatus.severity}>{uploadStatus.message}</Alert>
             </Snackbar>
         </Container>
+        </Layout>
     );
 }
 

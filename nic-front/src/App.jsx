@@ -1,18 +1,18 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import DashboardPage from './pages/DashboardPage';
-import UploadCSVPage from './pages/UploadCsvPage';
-import GenerateReportsPage from './pages/GenerateReportsPage';
-import ShowAllNICsPage from './pages/ShowAllNicPage';
-import SearchByFileNamePage from './pages/SearchByFileName';
+import DashboardPage from './pages/Home/DashboardPage';
+import UploadCSVPage from './pages/Home/UploadCsvPage';
+import GenerateReportsPage from './pages/Home/GenerateReportsPage';
+import ShowAllNICsPage from './pages/Home/ShowAllNicPage';
+import SearchByFileNamePage from './pages/Home/SearchByFileName';
 import Navbar from './components/Navbar';
 
 function App() {
   return (
     <Router>
-      <Navbar />
+      
       <Routes>
-        <Route path="/" element={<DashboardPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/upload" element={<UploadCSVPage />} />
         <Route path="/reports" element={<GenerateReportsPage />} />
         <Route path="/nics" element={<ShowAllNICsPage />} />
