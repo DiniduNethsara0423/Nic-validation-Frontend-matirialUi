@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Grid,
   TextField,
@@ -17,15 +18,36 @@ import {
 
 const SearchByFileName = () => {
   const [fileName, setFileName] = useState('');
-  const uploadedFiles = ['file1.csv', 'file2.csv', 'file3.csv']; // Example files
+  const [uploadedFiles, setUploadedFiles] = useState([]); // To store the file names from API
+  const [nicData, setNicData] = useState([]); // To store the data based on selected file
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const data = [
-    { age: 25, birthday: '1999-05-12', gender: 'Male', nic_number: '992345678V' },
-    { age: 30, birthday: '1994-08-23', gender: 'Female', nic_number: '942345678V' },
-    { age: 22, birthday: '2002-11-15', gender: 'Male', nic_number: '022345678V' },
-  ];
+  useEffect(() => {
+    // Fetch file names from API when the component mounts
+    axios.get('http://localhost:8080/file/names')
+      .then((response) => {
+        setUploadedFiles(response.data); // Set the file names
+      })
+      .catch((error) => {
+        console.error('Error fetching file names:', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (fileName) {
+      // Fetch data when fileName is selected
+      axios.get(`http://localhost:8080/nic/getByFileName/${fileName}`)
+        .then((response) => {
+          setNicData(response.data || []); 
+          console.log(response.data);
+        })
+       
+        .catch((error) => {
+          console.error('Error fetching NIC data:', error);
+        });
+    }
+  }, [fileName]);
 
   return (
     <div style={{ padding: '20px' }}>
@@ -42,14 +64,15 @@ const SearchByFileName = () => {
             value={fileName}
             onChange={(e) => setFileName(e.target.value)}
           >
-            {uploadedFiles.map((file, index) => (
-              <MenuItem key={index} value={file}>
-                {file}
+            {uploadedFiles.map((file) => (
+              <MenuItem key={file.id} value={file.fileName}>
+                {file.fileName}
               </MenuItem>
             ))}
           </TextField>
         </Grid>
       </Grid>
+
       <TableContainer component={Paper} style={{ marginTop: '20px' }}>
         <Table size={isSmallScreen ? 'small' : 'medium'}>
           <TableHead>
@@ -61,12 +84,12 @@ const SearchByFileName = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((item, index) => (
+            {nicData.map((item, index) => (
               <TableRow key={index} hover>
                 <TableCell>{item.age}</TableCell>
                 <TableCell>{item.birthday}</TableCell>
                 <TableCell>{item.gender}</TableCell>
-                <TableCell>{item.nic_number}</TableCell>
+                <TableCell>{item.nicNumber}</TableCell>
               </TableRow>
             ))}
           </TableBody>
