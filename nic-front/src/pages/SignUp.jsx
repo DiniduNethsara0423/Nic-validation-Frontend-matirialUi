@@ -3,38 +3,55 @@ import { Box, Card, CardContent, Avatar, Typography } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import SignUpForm from "../components/SignUpForm";
 import OTPVerification from "../components/OTPVerification ";
-import AccountSetup from "../components/AccountSetup";
 
 const SignUp = () => {
   const [step, setStep] = useState(1);
-  const [email, setEmail] = useState("");
+  const [userData, setUserData] = useState({ username: "", email: "", password: "" });
   const [otp, setOtp] = useState("");
-  const [form, setForm] = useState({ password: "", confirmPassword: "" });
 
-  const handleSendOTP = () => {
-    if (email) {
-      // API call to send OTP (simulate success)
-      alert(`OTP sent to ${email}`);
-      setStep(2);
+  const handleSignUp = async () => {
+    if (userData.username && userData.email && userData.password) {
+      try {
+        const response = await fetch(`http://localhost:8082/api/auth/signup`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userData),
+        });
+
+        const result = await response.text();
+        alert(result);
+
+        if (response.ok) {
+          setStep(2); // Move to OTP verification step
+        }
+      } catch (error) {
+        alert("Error signing up: " + error.message);
+      }
     } else {
-      alert("Enter a valid email!");
+      alert("All fields are required!");
     }
   };
 
-  const handleVerifyOTP = () => {
+  const handleVerifyOTP = async () => {
     if (otp.length === 6) {
-      alert("OTP Verified!");
-      setStep(3);
+      try {
+        const response = await fetch(`http://localhost:8082/api/auth/verify-otp`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: userData.email, otp }),
+        });
+
+        const result = await response.text();
+        alert(result);
+
+        if (response.ok) {
+          alert("OTP Verified! Account setup complete.");
+        }
+      } catch (error) {
+        alert("Error verifying OTP: " + error.message);
+      }
     } else {
       alert("Enter a valid 6-digit OTP!");
-    }
-  };
-
-  const handleSignUp = () => {
-    if (form.password && form.confirmPassword && form.password === form.confirmPassword) {
-      alert("Account Created Successfully!");
-    } else {
-      alert("Passwords do not match!");
     }
   };
 
@@ -70,9 +87,8 @@ const SignUp = () => {
             </Typography>
           </Box>
 
-          {step === 1 && <SignUpForm email={email} setEmail={setEmail} handleSendOTP={handleSendOTP} />}
+          {step === 1 && <SignUpForm userData={userData} setUserData={setUserData} handleSignUp={handleSignUp} />}
           {step === 2 && <OTPVerification otp={otp} setOtp={setOtp} handleVerifyOTP={handleVerifyOTP} />}
-          {step === 3 && <AccountSetup form={form} setForm={setForm} handleSignUp={handleSignUp} />}
         </CardContent>
       </Card>
     </Box>
