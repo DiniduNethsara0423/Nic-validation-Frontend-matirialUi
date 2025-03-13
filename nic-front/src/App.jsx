@@ -6,6 +6,8 @@ import GenerateReportsPage from './pages/Home/GenerateReportsPage';
 import ShowAllNICsPage from './pages/Home/ShowAllNicPage';
 import SearchByFileNamePage from './pages/Home/SearchByFileName';
 import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import ForgotPassword from './pages/ForgotPassword';
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
       
       <Routes>
         <Route path="/" element={<SignIn />} />
+        <Route path="/SignUp" element={<SignUp/>}/>
+        <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/upload" element={<UploadCSVPage />} />
         <Route path="/reports" element={<GenerateReportsPage />} />
