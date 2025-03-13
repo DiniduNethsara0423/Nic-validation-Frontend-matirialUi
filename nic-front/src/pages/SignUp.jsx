@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Card, CardContent, Avatar, Typography } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import SignUpForm from "../components/SignUpForm";
 import OTPVerification from "../components/OTPVerification ";
+import Swal from "sweetalert2";
 
 const SignUp = () => {
   const [step, setStep] = useState(1);
   const [userData, setUserData] = useState({ username: "", email: "", password: "" });
   const [otp, setOtp] = useState("");
+  const navigate = useNavigate();
 
   const handleSignUp = async () => {
     if (userData.username && userData.email && userData.password) {
@@ -19,16 +22,29 @@ const SignUp = () => {
         });
 
         const result = await response.text();
-        alert(result);
+
+        Swal.fire({
+          title: response.ok ? "Success!" : "Error",
+          text: result,
+          icon: response.ok ? "success" : "error",
+        });
 
         if (response.ok) {
-          setStep(2); // Move to OTP verification step
+          setStep(2);
         }
       } catch (error) {
-        alert("Error signing up: " + error.message);
+        Swal.fire({
+          title: "Error",
+          text: "Error signing up: " + error.message,
+          icon: "error",
+        });
       }
     } else {
-      alert("All fields are required!");
+      Swal.fire({
+        title: "Warning",
+        text: "All fields are required!",
+        icon: "warning",
+      });
     }
   };
 
@@ -42,16 +58,33 @@ const SignUp = () => {
         });
 
         const result = await response.text();
-        alert(result);
+
+        Swal.fire({
+          title: response.ok ? "Success!" : "Error",
+          text: result,
+          icon: response.ok ? "success" : "error",
+        });
 
         if (response.ok) {
-          alert("OTP Verified! Account setup complete.");
+          Swal.fire({
+            title: "OTP Verified!",
+            text: "Account setup complete.",
+            icon: "success",
+          }).then(() => navigate("/"));
         }
       } catch (error) {
-        alert("Error verifying OTP: " + error.message);
+        Swal.fire({
+          title: "Error",
+          text: "Error verifying OTP: " + error.message,
+          icon: "error",
+        });
       }
     } else {
-      alert("Enter a valid 6-digit OTP!");
+      Swal.fire({
+        title: "Invalid OTP",
+        text: "Enter a valid 6-digit OTP!",
+        icon: "warning",
+      });
     }
   };
 
