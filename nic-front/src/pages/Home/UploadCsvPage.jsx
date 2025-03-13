@@ -13,19 +13,39 @@ import {
     ListItemText,
     Snackbar,
     Alert,
+    Box,
+    Paper,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import { styled } from "@mui/system";
 import Layout from "./layout";
 
+const DropZone = styled(Paper)(({ theme }) => ({
+    border: "2px dashed #42A5F5",
+    padding: theme.spacing(4),
+    textAlign: "center",
+    cursor: "pointer",
+    backgroundColor: "#f9f9f9",
+    transition: "0.3s",
+    "&:hover": {
+        backgroundColor: "#f0f0f0",
+    },
+}));
 
 function UploadCsvPage() {
     const [files, setFiles] = useState([]);
     const [uploadStatus, setUploadStatus] = useState({ open: false, message: "", severity: "success" });
 
     const handleFileChange = (event) => {
-        const selectedFiles = Array.from(event.target.files).slice(0, 4); // Max 4 files
+        const selectedFiles = Array.from(event.target.files).slice(0, 4);
         setFiles(selectedFiles);
+    };
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        const droppedFiles = Array.from(event.dataTransfer.files).slice(0, 4);
+        setFiles(droppedFiles);
     };
 
     const handleUpload = async () => {
@@ -35,15 +55,11 @@ function UploadCsvPage() {
         }
 
         const formData = new FormData();
-        files.forEach((file) => {
-            formData.append("csv", file); // Key: "csv"
-        });
+        files.forEach((file) => formData.append("csv", file));
 
         try {
             await axios.post("http://localhost:8080/nic", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+                headers: { "Content-Type": "multipart/form-data" },
             });
 
             setUploadStatus({ open: true, message: "Files uploaded successfully!", severity: "success" });
@@ -55,14 +71,18 @@ function UploadCsvPage() {
 
     return (
         <Layout>
-        <Container>
-            <Typography variant="h4" gutterBottom>
-                Upload CSV Files
-            </Typography>
+            <Container maxWidth="md">
+                <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", textAlign: "center", mt: 4 }}>
+                    Upload CSV Files
+                </Typography>
 
-            <Card sx={{ p: 3, textAlign: "center", boxShadow: 3 }}>
-                <CardContent>
-                    <CloudUploadIcon sx={{ fontSize: 60, color: "#42A5F5" }} />
+                {/* Drag & Drop Area */}
+                <DropZone
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={handleDrop}
+                    elevation={3}
+                >
+                    <CloudUploadIcon sx={{ fontSize: 70, color: "#42A5F5" }} />
                     <Typography variant="h6" gutterBottom>
                         Drag & Drop CSV files here or Click to Upload
                     </Typography>
@@ -82,44 +102,51 @@ function UploadCsvPage() {
                     <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
                         (Maximum 4 files)
                     </Typography>
-                </CardContent>
-            </Card>
+                </DropZone>
 
-            {/* File Preview */}
-            {files.length > 0 && (
-                <Card sx={{ mt: 3, p: 2, boxShadow: 2 }}>
-                    <Typography variant="h6">Selected Files</Typography>
-                    <List>
-                        {files.map((file, index) => (
-                            <ListItem key={index}>
-                                <ListItemIcon>
-                                    <InsertDriveFileIcon color="primary" />
-                                </ListItemIcon>
-                                <ListItemText primary={file.name} />
-                            </ListItem>
-                        ))}
-                    </List>
-                </Card>
-            )}
+                
+                {files.length > 0 && (
+                    <Card sx={{ mt: 4, p: 2, boxShadow: 3, backgroundColor: "#f8f9fa" }}>
+                        <Typography variant="h6" sx={{ fontWeight: "bold" }}>Selected Files</Typography>
+                        <List>
+                            {files.map((file, index) => (
+                                <ListItem key={index}>
+                                    <ListItemIcon>
+                                        <InsertDriveFileIcon color="primary" />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={file.name.length > 25 ? file.name.slice(0, 25) + "..." : file.name}
+                                        secondary={`${(file.size / 1024).toFixed(2)} KB`}
+                                    />
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Card>
+                )}
 
-            {/* Upload Button */}
-            {files.length > 0 && (
-                <Grid container justifyContent="center" sx={{ mt: 3 }}>
-                    <Button variant="contained" color="success" onClick={handleUpload}>
-                        Upload Files
-                    </Button>
-                </Grid>
-            )}
+                {/* Upload Button */}
+                {files.length > 0 && (
+                    <Grid container justifyContent="center" sx={{ mt: 3 }}>
+                        <Button
+                            variant="contained"
+                            color="success"
+                            onClick={handleUpload}
+                            sx={{ px: 4, py: 1.5, fontSize: "1rem" }}
+                        >
+                            Upload Files
+                        </Button>
+                    </Grid>
+                )}
 
-            {/* Upload Status Snackbar */}
-            <Snackbar
-                open={uploadStatus.open}
-                autoHideDuration={4000}
-                onClose={() => setUploadStatus({ ...uploadStatus, open: false })}
-            >
-                <Alert severity={uploadStatus.severity}>{uploadStatus.message}</Alert>
-            </Snackbar>
-        </Container>
+                {/* Upload Status Snackbar */}
+                <Snackbar
+                    open={uploadStatus.open}
+                    autoHideDuration={4000}
+                    onClose={() => setUploadStatus({ ...uploadStatus, open: false })}
+                >
+                    <Alert severity={uploadStatus.severity}>{uploadStatus.message}</Alert>
+                </Snackbar>
+            </Container>
         </Layout>
     );
 }

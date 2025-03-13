@@ -79,98 +79,106 @@ function DashboardPage() {
     { category: "Female", count: stats.femaleCount },
   ];
 
-  const COLORS = ["#42A5F5", "#F48FB1"];
+  const COLORS = ["#1E88E5", "#D81B60"];
 
   return (
     <Layout>
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom fontWeight={600} textAlign="center">
-        Dashboard
-      </Typography>
-
-      {loading ? (
-        <Grid container justifyContent="center" sx={{ mt: 5 }}>
-          <CircularProgress />
-        </Grid>
-      ) : error ? (
-        <Typography color="error" textAlign="center">
-          {error}
+      <Container maxWidth="lg" sx={{ mt: 3, mb: 3 }}>
+        <Typography variant="h4" gutterBottom fontWeight={700} textAlign="center">
+          Dashboard Overview
         </Typography>
-      ) : (
-        <Grid container spacing={3}>
-          {[
-            { label: "Total NIC Count", value: stats.nicCount },
-            { label: "Male Count", value: stats.maleCount },
-            { label: "Female Count", value: stats.femaleCount },
-            { label: "Uploaded Files", value: stats.csvFilesUploaded },
-          ].map((stat, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Card sx={{ textAlign: "center", p: 2, boxShadow: 5, borderRadius: 2 }}>
+
+        {loading ? (
+          <Grid container justifyContent="center" sx={{ mt: 5 }}>
+            <CircularProgress />
+          </Grid>
+        ) : error ? (
+          <Typography color="error" textAlign="center">
+            {error}
+          </Typography>
+        ) : (
+          <Grid container spacing={3}>
+            {/* Stats Cards */}
+            {[
+              { label: "Total NIC Count", value: stats.nicCount },
+              { label: "Male Count", value: stats.maleCount },
+              { label: "Female Count", value: stats.femaleCount },
+              { label: "Uploaded Files", value: stats.csvFilesUploaded },
+            ].map((stat, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
+                <Card
+                  sx={{
+                    textAlign: "center",
+                    p: 2,
+                    boxShadow: 2,
+                    borderRadius: 2,
+                    background: "#F9F9F9",
+                  }}
+                >
+                  <CardContent>
+                    <Typography variant="h6" fontWeight={500} color="textSecondary">
+                      {stat.label}
+                    </Typography>
+                    <Typography variant="h4" color="primary" fontWeight={700}>
+                      {stat.value}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+
+            {/* Pie Chart */}
+            <Grid item xs={12} md={6}>
+              <Card sx={{ p: 2, boxShadow: 2, borderRadius: 2 }}>
                 <CardContent>
-                  <Typography variant="h6" fontWeight={500}>
-                    {stat.label}
+                  <Typography variant="h6" textAlign="center" fontWeight={500}>
+                    Gender Distribution (Pie Chart)
                   </Typography>
-                  <Typography variant="h3" color="primary" fontWeight={700}>
-                    {stat.value}
-                  </Typography>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={110}
+                        dataKey="value"
+                        label
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={index} fill={COLORS[index]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend verticalAlign="bottom" height={30} />
+                    </PieChart>
+                  </ResponsiveContainer>
                 </CardContent>
               </Card>
             </Grid>
-          ))}
 
-          {/* Pie Chart */}
-          <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "center" }}>
-            <Card sx={{ p: 3, boxShadow: 5, borderRadius: 2, width: "100%" }}>
-              <CardContent>
-                <Typography variant="h6" textAlign="center" fontWeight={500}>
-                  Gender Distribution (Pie Chart)
-                </Typography>
-                <ResponsiveContainer width="100%" height={350}>
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={120}
-                      fill="#8884d8"
-                      dataKey="value"
-                      label
-                    >
-                      {pieData.map((entry, index) => (
-                        <Cell key={index} fill={COLORS[index]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend verticalAlign="bottom" height={36} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+            {/* Bar Chart */}
+            <Grid item xs={12} md={6}>
+              <Card sx={{ p: 2, boxShadow: 2, borderRadius: 2 }}>
+                <CardContent>
+                  <Typography variant="h6" textAlign="center" fontWeight={500}>
+                    Gender Distribution (Bar Chart)
+                  </Typography>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={barData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="category" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="count" fill="#1E88E5" name="Count" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
-
-          {/* Bar Chart */}
-          <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "center" }}>
-            <Card sx={{ p: 3, boxShadow: 5, borderRadius: 2, width: "100%" }}>
-              <CardContent>
-                <Typography variant="h6" textAlign="center" fontWeight={500}>
-                  Gender Distribution (Bar Chart)
-                </Typography>
-                <ResponsiveContainer width="100%" height={350}>
-                  <BarChart data={barData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="category" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="count" fill="#42A5F5" name="Count" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      )}
-    </Container>
+        )}
+      </Container>
     </Layout>
   );
 }

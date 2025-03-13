@@ -20,7 +20,6 @@ function GenerateReportsPage() {
   const [reportType, setReportType] = useState("");
   const [fileNames, setFileNames] = useState([]);
 
-  // Fetch available file names from API
   useEffect(() => {
     const fetchFileNames = async () => {
       try {
@@ -34,7 +33,7 @@ function GenerateReportsPage() {
     fetchFileNames();
   }, []);
 
-  // Handle file download
+
   const handleGenerateReport = async () => {
     if (!fileName || !reportType) {
       alert("Please select a file and a report type.");
@@ -46,7 +45,7 @@ function GenerateReportsPage() {
     try {
       const response = await axios.get(apiUrl, { responseType: "blob" });
 
-      // Create a Blob from the response
+  
       const fileBlob = new Blob([response.data], {
         type:
           reportType === "pdf"
@@ -56,7 +55,7 @@ function GenerateReportsPage() {
               : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
 
-      // Download file
+      
       saveAs(fileBlob, `${fileName.split(".")[0]}.${reportType}`);
     } catch (error) {
       console.error("Error downloading report:", error);
@@ -74,7 +73,7 @@ function GenerateReportsPage() {
       <Card sx={{ p: 3, boxShadow: 3 }}>
         <CardContent>
           <Grid container spacing={2}>
-            {/* File Selection Dropdown */}
+            
             <Grid item xs={12} md={5}>
               <TextField
                 select
@@ -91,7 +90,7 @@ function GenerateReportsPage() {
               </TextField>
             </Grid>
 
-            {/* Report Type Selection */}
+            
             <Grid item xs={12} md={5}>
               <TextField
                 select
@@ -108,7 +107,7 @@ function GenerateReportsPage() {
               </TextField>
             </Grid>
 
-            {/* Download Button */}
+            
             <Grid item xs={12} md={2}>
               <IconButton color="primary" onClick={handleGenerateReport}>
                 <FileDownloadIcon />
