@@ -52,7 +52,7 @@ const ForgotPassword = () => {
         newPassword: form.newPassword,
       });
       if (response.data.message === "Password reset successfully!") {
-        navigate("/dashboard");
+        navigate("/");
       } else {
         setAlertMessage(response.data.message || "Password reset successful!");
       }
