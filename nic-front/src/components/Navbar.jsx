@@ -32,6 +32,8 @@ const Navbar = () => {
     { label: "Generate Reports", path: "/reports" },
     { label: "Show All NICs", path: "/nics" },
     { label: "Search by File Name", path: "/search" },
+   
+
   ];
 
   const currentTab = navItems.findIndex((item) => item.path === location.pathname);

@@ -8,6 +8,7 @@ import SearchByFileNamePage from './pages/Home/SearchByFileName';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
+import Chat from "./pages/Home/Chat"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/reports" element={<GenerateReportsPage />} />
         <Route path="/nics" element={<ShowAllNICsPage />} />
         <Route path="/search" element={<SearchByFileNamePage />} />
+        <Route path="/chat" element={<Chat/>} />
       </Routes>
     </Router>
   );
